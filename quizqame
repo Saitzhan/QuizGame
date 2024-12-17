@@ -1,0 +1,37 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    int score = 0;
+    int totalQuestions = 5;
+    int userAnswer;
+
+    char *questions[] = {
+        //The questions that we discussed
+    };
+
+    char *options[][4] = {
+       //The options discussed
+    };
+
+    //main loop
+    for (int i = 0; i < totalQuestions; i++) {
+        printf("Question %d: %s\n", i + 1, questions[i]);
+        for (int j = 0; j < 4; j++) {
+            printf("%s\n", options[i][j]);
+        }
+
+        // getting answer from user
+        printf("Your answer: ");
+        scanf("%d", &userAnswer);
+
+        // call function
+        if (checkAnswer(userAnswer, i)) {
+            score++;
+            printf("Correct!\n");
+        } else {
+            printf("Incorrect!\n");
+        }
+
+        printf("\n");
+    }
