@@ -1,0 +1,13 @@
+typedef struct {
+    char question[300];
+    char options[4][100];
+    int correct_option;
+}Question;
+
+void displayQuestion(Question x)
+{
+    printf("%s\n", x.question);
+    for (int i = 0; i < 4; i++) {
+        printf("%d. %s\n", i + 1, x.options[i]);
+    }
+}
