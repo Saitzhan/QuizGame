@@ -1,37 +1,68 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
+
+typedef struct {
+    char *question;
+    char *options[4];
+    int correct_answer;
+} Question;
+
+void display_question(Question q) {
+    printf("\n%s\n", q.question);
+    for (int i = 0; i < 4; i++) {
+        printf("%d. %s\n", i + 1, q.options[i]);
+    }
+}
 
 int main() {
+    Question questions[] = {
+        {"Which AI algorithm is commonly used for image recognition?", 
+         {"Reinforcement Learning", "Decision Trees", "Convolutional Neural Networks (CNNs)", "Natural Language Processing (NLP)"}, 2},
+        {"What is the study of Computer Engineering?", 
+         {"Designing and developing hardware and software systems", "The study of managing and organizing computer networks", "The study of creating and maintaining websites", "The study of coding and programming exclusively"}, 0},
+        {"In which year was the World Wide Web (WWW) first introduced to the public?", 
+         {"1983", "1991", "2000", "1995"}, 1},
+        {"Which country is home to the largest data center in the world?", 
+         {"United States", "China", "Finland", "Norway"}, 1},
+        {"Identify the even number in the sequence: 3, 5, 7, 9, 11, ?", 
+         {"12", "13", "14", "15"}, 0}
+    };
+    
     int score = 0;
-    int totalQuestions = 5;
-    int userAnswer;
+    int num_questions = sizeof(questions) / sizeof(questions[0]);
 
-    char *questions[] = {
-        //The questions that we discussed
-    };
-
-    char *options[][4] = {
-       //The options discussed
-    };
-
-    //main loop
-    for (int i = 0; i < totalQuestions; i++) {
-        printf("Question %d: %s\n", i + 1, questions[i]);
-        for (int j = 0; j < 4; j++) {
-            printf("%s\n", options[i][j]);
-        }
-
-        // getting answer from user
-        printf("Your answer: ");
-        scanf("%d", &userAnswer);
-
-        // call function
-        if (checkAnswer(userAnswer, i)) {
-            score++;
-            printf("Correct!\n");
-        } else {
-            printf("Incorrect!\n");
-        }
-
-        printf("\n");
+    srand(time(NULL));
+    for (int i = 0; i < num_questions; i++) {
+        int j = rand() % num_questions;
+        Question temp = questions[i];
+        questions[i] = questions[j];
+        questions[j] = temp;
     }
+
+    for (int i = 0; i < num_questions; i++) {
+        display_question(questions[i]);
+        
+        int user_answer;
+        while (1) {
+            printf("Enter the number of your answer: ");
+            if (scanf("%d", &user_answer) == 1 && user_answer >= 1 && user_answer <= 4) {
+                break;
+            } else {
+                printf("Invalid input, please enter a number between 1 and 4.\n");
+                while (getchar() != '\n');
+            }
+        }
+        
+        if (user_answer - 1 == questions[i].correct_answer) {
+            printf("Correct!\n");
+            score++;
+        } else {
+            printf("Incorrect! The correct answer was: %s\n", questions[i].options[questions[i].correct_answer]);
+        }
+    }
+
+    printf("\nYour final score is: %d/%d\n", score, num_questions);
+
+    return 0;
+}
